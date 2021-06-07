@@ -23,6 +23,7 @@ public class Wallet {
     }
 
     public void giveChange(Double balance) {
+        double lastBalance = balance;
         balance = (balance * 100); // this converts balance to a whole number
         quarter = (int) (balance / 25); // all coins will be cast to integers to be whole numbers
         balance = balance - (quarter * 25);
@@ -31,5 +32,7 @@ public class Wallet {
         nickel = (int) (balance / 5);
 
         System.out.println("Your change is " + quarter + " quarters, " + dime + " dimes, and " + nickel + " nickels.");
+
+        Logger.writeLog("GIVE CHANGE: $" + lastBalance + " $" + 0.00);
     }
 }

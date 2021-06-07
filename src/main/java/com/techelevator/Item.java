@@ -6,7 +6,7 @@ public abstract class Item {
     private String itemName;
     private double price;
     private String itemType;
-    private int quantity =5;
+    private int quantity = 5;
     private boolean outOfStock;
     private int totalItemsSold = 0;
 

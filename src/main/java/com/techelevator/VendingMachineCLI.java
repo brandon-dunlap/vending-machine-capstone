@@ -34,12 +34,12 @@ public class VendingMachineCLI {
 	public void run() {
 
 		try {
-			File vendingMachineFile = new File("/Users/student/workspace/java-capstone-module-1-team-10/vendingmachine.csv");
+			File vendingMachineFile = new File("vendingmachine.csv");
 			Scanner vendingMachineScanner = new Scanner(vendingMachineFile);
 			while (vendingMachineScanner.hasNextLine()) {
 				String line = vendingMachineScanner.nextLine(); // reads from .csv
 				String[] arr = line.split("\\|");
-				//saving items from list in memory as objects:
+				//saving items from .csv as objects in ArrayList:
 				if (arr[3].equals("Chip")) {
 					Chips chips = new Chips(arr[0], arr[1], Double.parseDouble(arr[2]), arr[3]);
 					itemList.add(chips);
@@ -82,7 +82,7 @@ public class VendingMachineCLI {
 			String choice2 = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
 
 			if (choice2.equals(PURCHASE_MENU_OPTION_FEED_MONEY)) {
-				System.out.println("Please enter 1, 2, 5, or 10: ");
+				System.out.print("Please enter 1, 2, 5, or 10: ");
 				String input = userInput.nextLine();
 				try {
 					insertMoney(input);
@@ -90,15 +90,15 @@ public class VendingMachineCLI {
 					e.printStackTrace();
 				}
 				System.out.println("Current Money Provided: " + newWallet.getBalance());
-				Logger.writeLog("Feeding Money " + input);
+				Logger.writeLog("FEED MONEY: $" + input + " $" + newWallet.getBalance());
 
 			} else if (choice2.equals(PURCHASE_MENU_OPTION_SELECT_PRODUCT)) {
 				for (int i = 0; i < itemList.size(); i++) {     //Show the list of products in stock
 					System.out.println(itemList.get(i));
 				}
 				System.out.println(); // for space
-				System.out.println("Current Money Provided: " + newWallet.getBalance());    // show remaining balance to customer
-				System.out.print("Please enter the code of the item you wish to purchase: ");// prompt user for item selection & check entered string against string in list
+				System.out.println("Current Money Provided: " + newWallet.getBalance());
+				System.out.print("Please enter the code of the item you wish to purchase: ");
 				String input = userInput.nextLine();
 
 				boolean itemPick = false;
@@ -110,15 +110,15 @@ public class VendingMachineCLI {
 							System.out.println("Item is out of stock. Please choose another item.");
 							return;
 						}
-						if (newWallet.getBalance() < snacks.getPrice()) { // checking to see if balance is enough money, if not it will read the message below
-							System.out.println("Balance is not enough to purchase product, please get a job."); // created this if statement within the main if statement (above), because if input matches itemNumber, we have more actions to take.
+						if (newWallet.getBalance() < snacks.getPrice()) {
+							System.out.println("Not enough in balance to purchase.");
 							return;
 						}
-						newWallet.purchases(snacks.getPrice());             // this is getting the purchases, and getting the price of the item
-						snacks.setQuantity(snacks.getQuantity() - 1);   // subtracting the quantity of items until it goes out of stock
-						System.out.println(snacks.getItemName() + " " + snacks.getPrice() + " " + "Remaining balance" + " " + newWallet.getBalance()); // printing out the item name with a price, and getting the remaining balance
-						snacks.message();
-						Logger.writeLog("Purchasing: " + snacks.getItemName() + " Price: " + snacks.getPrice() + " Balance is: " + newWallet.getBalance());
+						newWallet.purchases(snacks.getPrice());
+						snacks.setQuantity(snacks.getQuantity() - 1);
+						System.out.println(snacks.getItemName() + ": $" + snacks.getPrice() + " // Remaining balance: $" + newWallet.getBalance());
+						System.out.println(snacks.message());
+						Logger.writeLog(snacks.getItemName() + " " + snacks.getItemNumber() + " $" + snacks.getPrice() + " $" + newWallet.getBalance());
 					}
 				}
 				if (!itemPick) {
